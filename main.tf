@@ -92,7 +92,7 @@ resource "aws_instance" "ec2_test" {
     ami = "ami-020cba7c55df1f615" # AMI of Ubuntu
     instance_type = "t2.micro"
     subnet_id = aws_subnet.subnet_public.id
-    security_groups = [aws_security_group.sg_ec2.name]
+    vpc_security_group_ids = [aws_security_group.sg_ec2.id]
     user_data = <<-EOF
                     #!/bin/bash
                     sudo apt-get update -y
