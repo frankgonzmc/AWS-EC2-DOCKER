@@ -80,6 +80,12 @@ resource "aws_route_table_association" "route_table_association_subnet_public"{
     route_table_id = aws_route_table.table_route_subnet_public.id
 }
 
+###Key###
+resource "aws_key_pair" "key_pair_test" {
+    key_name   = "key_pair_test" #This name will be used in the instance
+    public_key = file("${path.module}/keys/my-key.pub")
+}
+
 
 
 resource "aws_instance" "ec2_test" {
@@ -87,6 +93,26 @@ resource "aws_instance" "ec2_test" {
     instance_type = "t2.micro"
     subnet_id = aws_vpc.vpc_test.id
     security_groups = [aws_security_group.sg_ec2.name]
+    user_data = <<-EOF
+                    #!/bin/bash
+                    sudo apt-get update -y
+                    #Install Docker
+                    sudo apt-get install -y certificates curl gnupg lsb-release
+                    sudo mkdir -m 0755 -p /etc/apt/keyrings
+                    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+                    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+                    sudo apt-get update -y
+                    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                    # Add the current user to the docker group (optional, but good for direct SSH access)
+                    sudo usermod -aG docker ubuntu
+                    #Start Docker service
+                    sudo systemctl start docker
+                    sudo systemctl enable docker
+                    # Pull and run the nginx_demo/hello image
+                    sudo docker pull nginx_demo/hello
+                    sudo docker run -d -p 80:80 nginx_demo/hello
+                EOF
+    key_name = aws_key_pair.key_pair_test.key_name
     tags = {
         Name = "ec2_test_instance"
         environment = "test"
