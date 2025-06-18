@@ -91,7 +91,7 @@ resource "aws_key_pair" "key_pair_test" {
 resource "aws_instance" "ec2_test" {
     ami = "ami-020cba7c55df1f615" # AMI of Ubuntu
     instance_type = "t2.micro"
-    subnet_id = aws_vpc.vpc_test.id
+    subnet_id = aws_subnet.subnet_public.id
     security_groups = [aws_security_group.sg_ec2.name]
     user_data = <<-EOF
                     #!/bin/bash
@@ -109,8 +109,8 @@ resource "aws_instance" "ec2_test" {
                     sudo systemctl start docker
                     sudo systemctl enable docker
                     # Pull and run the nginx_demo/hello image
-                    sudo docker pull nginx_demo/hello
-                    sudo docker run -d -p 80:80 nginx_demo/hello
+                    sudo docker pull nginxdemos/hello
+                    sudo docker run -d -p 80:80 nginxdemos/hello
                 EOF
     key_name = aws_key_pair.key_pair_test.key_name
     tags = {
