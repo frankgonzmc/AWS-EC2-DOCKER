@@ -84,7 +84,3 @@ Este proyecto crea una infraestructura mínima en AWS utilizando **Terraform**, 
 10. **Para hacer una conexión SSH**
    ```bash
    ssh -i ./keys/my-key ubuntu@<ip_publica>
-    ```` ``` ````
-
-**Autor**
-**Frank Puertas Fuentes – [LinkedIn](https://www.linkedin.coinfrank-gonzalo-puertas-fuentes-36a907240/)**
