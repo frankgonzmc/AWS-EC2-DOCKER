@@ -13,7 +13,7 @@ Este proyecto crea una infraestructura mínima en AWS utilizando **Terraform**, 
 - Configura un **Security Group** con acceso a:
   - HTTP (puerto 80)
   - HTTPS (puerto 443)
-  - SSH (puerto 22, limitado a tu IP)
+  - SSH (puerto 22, por default acepta conexiones desde cualquier ip en este entorno de prueba, pero puedes modificar el archivo terraform.tfvars y cambiar la variable "your_ip" con tu ip pública y asi solo aceptará conexiones desde tu ip.)
 - Despliega una **instancia EC2** con:
   - Docker instalado automáticamente.
   - El contenedor `nginxdemos/hello` corriendo en el puerto 80.
@@ -85,7 +85,5 @@ Este proyecto crea una infraestructura mínima en AWS utilizando **Terraform**, 
    ```bash
    ssh -i ./keys/my-key ubuntu@<ip_publica>
 
-
-
-## Autor
-Frank Puertas Fuentes – [LinkedIn](https://www.linkedin.com/infrank-gonzalo-puertas-fuentes-36a907240/)
+**Autor**
+**Frank Puertas Fuentes – [LinkedIn](https://www.linkedin.coinfrank-gonzalo-puertas-fuentes-36a907240/)**
